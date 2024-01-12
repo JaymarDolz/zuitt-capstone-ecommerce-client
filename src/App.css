@@ -1,4 +1,4 @@
-.App {
+/*.App {
   text-align: center;
 }
 
@@ -36,3 +36,21 @@
     transform: rotate(360deg);
   }
 }
+*/
+
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+#courseComponent1 h6 {
+  margin: 0;
+  font-weight: bold;
+}
+
+.cardHighlight{
+  min-height: 100%;
+}
+
