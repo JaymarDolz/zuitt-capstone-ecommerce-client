@@ -21,9 +21,8 @@ export default function Register() {
       email !== "" &&
       mobileNo !== "" &&
       password !== "" &&
-      password >= 8 &&
       confirmPassword !== "" &&
-      mobileNo.length == 11 &&
+      mobileNo.length >= 10 &&
       password === confirmPassword
     );
   }, [firstName, lastName, email, mobileNo, password, confirmPassword]);
@@ -31,7 +30,7 @@ export default function Register() {
   function registerUser(event) {
     event.preventDefault();
 
-    fetch(`${process.env.REACT_APP_API_URL}/users/register`, {
+    fetch(`${process.env.REACT_APP_API_URL}/users/`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -150,6 +149,6 @@ export default function Register() {
           </div>
         </form>
       </div>
-      
+
   );
 }
