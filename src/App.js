@@ -9,73 +9,68 @@ import {UserProvider} from './UserContext'
 import './App.css';
 import AppNavbar from './components/AppNavbar'
 import Home from './pages/Home';
+import Shop from './pages/Shop';
 import Register from './pages/Register';
 import Login from './pages/Login'
 import Logout from './pages/Logout';
 
-function App() {
+export default function App() {
+  const [user, setUser] = useState({ id: null, isAdmin: null, loading: true });
+  const unsetUser = () => {
+    localStorage.clear();
+  }
 
-    const[user, setUser] = useState({id: null, isAdmin: null})
-    const unsetUser = () => {
-        localStorage.clear();
-    }
+  useEffect(() => {
+    fetch(`${process.env.REACT_APP_API_URL}/users/details`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('access')}`
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.user) {
+          setUser({
+            id: data.user._id,
+            isAdmin: data.user.isAdmin,
+            loading: false
+          });
+        } else {
+          setUser({
+            id: null,
+            isAdmin: null,
+            loading: false
+          });
+        }
+      })
+      .catch(error => {
+        console.error("Error fetching user details:", error);
+        setUser({
+          id: null,
+          isAdmin: null,
+          loading: false
+        });
+      });
+  }, []);
 
+  return (
+    <UserProvider value={{ user, setUser, unsetUser }}>
+      <Router>
+        <Container fluid>
+          <AppNavbar />
+          {!user.loading ? (
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/shop" element={<Shop />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/logout" element={<Logout />} />
 
-    useEffect(() => {
-      console.log(user);
-      console.log(localStorage);
-    },[user]);
-
-    useEffect(()=> {
-        fetch(`${process.env.REACT_APP_API_URL}/users/details`, {
-            headers: {
-                Authorization: `Bearer ${ localStorage.getItem('access') }`
-            }
-            })
-        .then(res => res.json())
-        .then(data => {
-            if (data.user){
-                setUser({
-                    id: data.user._id,
-                    isAdmin: data.user.isAdmin
-                })
-            } else {
-                setUser({
-                    id: null,
-                    isAdmin: null
-                })
-            }
-        })
-    },[])
-
-
-
-
-
-
-  // XML Page
-    return (
-        <UserProvider value = {{user, setUser, unsetUser}}>
-        
-          <Router>
-          {/*note the forward slash after appNavbar*/}
-
-            <Container fluid>
-              <AppNavbar />
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/logout" element={<Logout />} />
-
-
-              </Routes>
-            </Container>
-          </Router>
-
-        </UserProvider>
-
-    );
+            </Routes>
+          ) : (
+            <p>Loading...</p>
+          )}
+        </Container>
+      </Router>
+    </UserProvider>
+  );
 }
-
-export default App;

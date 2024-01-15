@@ -1,111 +1,124 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { Navigate } from 'react-router-dom';
-
-
-
+import React, { useState, useContext } from 'react';
+import { Navigate, Link} from 'react-router-dom';
 import UserContext from '../UserContext';
+import Swal from 'sweetalert2';
 import '../styles/Form.css';
 
 
-
-
-
 export default function Login() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const { user, setUser } = useContext(UserContext);
+  const [message, setMessage] = useState('');
 
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [isActive, setIsActive] = useState(false);
-    const { user, setUser } = useContext(UserContext);
 
-    useEffect(() => {
-        setIsActive(email !== '' && password !== '');
-    }, [email, password]);
+  // useEffect(() => {
+  //   setIsActive(email !== '' && password !== '');
+  // }, [email, password]);
 
-    const retrieveUserDetails = (access) => {
-        fetch(`${process.env.REACT_APP_API_URL}/users/details`, {
-            headers: {
-                Authorization: `Bearer ${access}`,
-            },
-        })
-        .then((res) => res.json())
-        .then((data) => {
-            setUser({
-                id: data.user._id,
-                isAdmin: data.user.isAdmin,
-            });
-        console.log(user);
+  const retrieveUserDetails = (access) => {
+    fetch(`${process.env.REACT_APP_API_URL}/users/details`, {
+      headers: {
+        Authorization: `Bearer ${access}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setUser({
+          id: data.user._id,
+          isAdmin: data.user.isAdmin,
         });
-    };
 
-    function loginUser(event){
-           
-        event.preventDefault();
+      });
+  };
 
-        fetch(`${process.env.REACT_APP_API_URL}/users/login`, {
-            method: 'POST',
-            headers: {'Content-Type' : "application/json"},
-            body: JSON.stringify({
-                email: email,
-                password: password 
-            })
+  function loginUser(event) {
+    event.preventDefault();
 
-        }) 
-        .then((response) => response.json()) 
-        .then((data) => {
+    fetch(`${process.env.REACT_APP_API_URL}/users/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: email,
+        password: password,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.access) {
+          setEmail('');
+          setPassword('');
+          localStorage.setItem('access', data.access);
+          retrieveUserDetails(data.access);
+          Swal.fire({
+            title: `Welcome!`,
+            icon: 'success',
+            text: "You are now logged In"
+          })
+        } else if (!email) {
+          setMessage(data.error || data.message);
+          document.querySelector('.wrap-input-email').classList.add('shake');
 
-            if (data.access) {
-                setEmail('');
-                setPassword('');
-                
-                localStorage.setItem('access', data.access);
-                retrieveUserDetails(data.access);
+          setTimeout(() => {
+            document.querySelector('.wrap-input-email').classList.remove('shake');
+          }, 200);
+        } else if (!password) {
+          setMessage(data.error || data.message);
+          document.querySelector('.wrap-input-password').classList.add('shake');
 
-                alert('Login Successful');
+          setTimeout(() => {
+            document.querySelector('.wrap-input-password').classList.remove('shake');
+          }, 200);
+        } else {
+          setMessage(data.error || data.message);
+        }
+      });
+  }
 
-            } else {
-                  alert(data.error || 'Login Failed');
-            }
-        }); // retrieve the data
-    }
 
-    return (
 
-        (user.id)?
-        <Navigate to="/"/>
-        :
-        <div className="wrap-login100">
-            <form className="login100-form validate-form" onSubmit={loginUser}>
-                <span className="login100-form-title">Log in</span>
-                <div className="wrap-input100 validate-input" data-validate="Enter username">
-                    <input
-                        className="input100"
-                        type="text"
-                        name="username"
-                        placeholder="Username"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                </div>
-                <div className="wrap-input100 validate-input" data-validate="Enter password">
-                    <input
-                        className="input100"
-                        type="password"
-                        name="pass"
-                        placeholder="Password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                </div>
-                <div className="container-login100-form-btn">
-                    {
-                        isActive === true ?
-                        <button className = "login100-form-btn" type="submit" id="submitBtn">Submit</button>
-                        :
-                        <button className = "login100-form-btn-disabled" type="submit" id="submitBtn" disabled>Submit</button>
-                    }
 
-                </div>
-            </form>
-        </div>
-    );
+  return (
+    user.id ? (
+      <Navigate to="/" />
+    ) : (
+      <div>
+      <div className="wrap-form">
+        <div className="form-overlay"></div>
+        <form className="form-card" >
+          <span className="form-title">Log in</span>
+          <div className="wrap-input wrap-input-email">
+            <input
+              className="input"
+              type="text"
+              name="username"
+              placeholder="Username"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+          <div className="wrap-input wrap-input-password">
+            <input
+              className="input"
+              type="password"
+              name="pass"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+          {message && <div className="alert alert-danger">{message}</div>}
+          <div className="container-form-btn gap-3">
+              <button className="form-btn" onClick={loginUser} id="submitBtn">
+                Submit
+              </button>
+              <Link to="/register" className="form-btn">
+                Sign Up
+              </Link>
+            </div>
+        </form>
+      </div>
+      </div>
+    )
+  );
 }

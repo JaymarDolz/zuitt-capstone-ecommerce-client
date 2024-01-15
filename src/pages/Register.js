@@ -1,154 +1,213 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { Navigate } from 'react-router-dom';
+import React, { useState, useEffect, useContext  } from 'react';
+import { Navigate, useNavigate, Link } from 'react-router-dom';
 import { Form } from 'react-bootstrap';
 import UserContext from '../UserContext';
+import Swal from 'sweetalert2';
 import '../styles/Form.css';
 
 export default function Register() {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [mobileNo, setMobileNo] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [isActive, setIsActive] = useState(false);
-  const { user } = useContext(UserContext);
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [email, setEmail] = useState("");
+    const [mobileNo, setMobileNo] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [message, setMessage] = useState('');
+    const navigate = useNavigate();
+    const { user } = useContext(UserContext);
+    const [submitButtonClicked, setSubmitButtonClicked] = useState(false);
 
-  useEffect(() => {
-    setIsActive(
-      firstName !== "" &&
-      lastName !== "" &&
-      email !== "" &&
-      mobileNo !== "" &&
-      password !== "" &&
-      confirmPassword !== "" &&
-      mobileNo.length >= 10 &&
-      password === confirmPassword
-    );
-  }, [firstName, lastName, email, mobileNo, password, confirmPassword]);
+    console.log("confirm " + confirmPassword);
+    console.log("pass " + password);
+    
 
-  function registerUser(event) {
-    event.preventDefault();
 
-    fetch(`${process.env.REACT_APP_API_URL}/users/`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        firstName: firstName,
-        lastName: lastName,
-        email: email,
-        mobileNo: mobileNo,
-        password: password
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        if (data.message) {
-          setFirstName('');
-          setLastName('');
-          setEmail('');
-          setMobileNo('');
-          setPassword('');
-          setConfirmPassword('');
-          alert("Registration Successful");
+    function registerUser(event) {
+        event.preventDefault();
+        setSubmitButtonClicked(true);
+    }
+
+    // ductTape FIX for STILL REGISTERING WHILE confirmPassword at fetch is not equal
+    useEffect(() => {
+        if (confirmPassword !== password) {
+            setMessage("Passwords do not match");
         } else {
-          alert(data.error || 'Login Failed');
+            setMessage('');  // Clear the error message if passwords match
         }
-      });
-  }
+    }, [submitButtonClicked]);
 
-  return (
-    (user.id) ?
-      <Navigate to="/" />
-      :
-      <div className="wrap-login100">
-        <form className="login100-form validate-form" onSubmit={registerUser}>
-          <span className="login100-form-title">Register</span>
+    function registerUser(event) {
+        event.preventDefault();
 
-          <div className="wrap-input100 validate-input" data-validate="Enter first name">
-            <Form.Label>First Name: </Form.Label>
-            <input
-              className="input100"
-              type="text"
-              name="firstName"
-              placeholder="First Name"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-            />
-          </div>
+        fetch(`${process.env.REACT_APP_API_URL}/users/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            mobileNo: mobileNo,
+            password: password
+        }),
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            console.log(data);
+            if (data.message) {
+            setFirstName('');
+            setLastName('');
+            setEmail('');
+            setMobileNo('');
+            setPassword('');
+            setConfirmPassword('');
+            Swal.fire({
+                title: `Successfully registered`,
+                icon: 'success',
+                text: "You are now registered"
+              })
 
-          <div className="wrap-input100 validate-input" data-validate="Enter last name">
-            <Form.Label>Last Name: </Form.Label>
-            <input
-              className="input100"
-              type="text"
-              name="lastName"
-              placeholder="Last Name"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-            />
-          </div>
+            navigate('/login')    
 
-          <div className="wrap-input100 validate-input" data-validate="Enter email">
-            <Form.Label>Email Address: </Form.Label>
-            <input
-              className="input100"
-              type="email"
-              name="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
+            }  else if (!firstName) {
+                setMessage(data.error || data.message);
+                document.querySelector('.wrap-input-firstName').classList.add('shake');
+      
+                setTimeout(() => {
+                  document.querySelector('.wrap-input-firstName').classList.remove('shake');
+                }, 200);
+            } else if (!lastName) {
+                setMessage(data.error || data.message);
+                document.querySelector('.wrap-input-lastName').classList.add('shake');
+      
+                setTimeout(() => {
+                  document.querySelector('.wrap-input-lastName').classList.remove('shake');
+                }, 200);
+            } else if (!email) {
+                setMessage(data.error || data.message);
+                document.querySelector('.wrap-input-email').classList.add('shake');
+      
+                setTimeout(() => {
+                  document.querySelector('.wrap-input-email').classList.remove('shake');
+                }, 200);
+            } else if (!mobileNo) {
+                setMessage(data.error || data.message);
+                document.querySelector('.wrap-input-mobileNo').classList.add('shake');
+      
+                setTimeout(() => {
+                  document.querySelector('.wrap-input-mobileNo').classList.remove('shake');
+                }, 200);
+            } else if (!password) {
+                setMessage(data.error || data.message);
+                document.querySelector('.wrap-input-password').classList.add('shake');
+      
+                setTimeout(() => {
+                  document.querySelector('.wrap-input-password').classList.remove('shake');
+                }, 200);
+            } else if (!confirmPassword) {
+                setMessage(data.error || data.message);
+                document.querySelector('.wrap-input-confirmPassword').classList.add('shake');
+      
+                setTimeout(() => {
+                  document.querySelector('.wrap-input-confirmPassword').classList.remove('shake');
+                }, 200);
+            } else if (confirmPassword !== password){
+                setMessage("Passwords do not match");
+                return; 
+            } else {
+                setMessage(data.error || data.message);
+            }
+        });
+    }
 
-          <div className="wrap-input100 validate-input" data-validate="Enter mobile number">
-            <Form.Label>Mobile Number: </Form.Label>
-            <input
-              className="input100"
-              type="tel"
-              name="mobileNo"
-              placeholder="Mobile Number"
-              value={mobileNo}
-              onChange={(e) => setMobileNo(e.target.value)}
-            />
-          </div>
+    return (
+        (user.id) ?
+        <Navigate to="/" />
+        :
+        <div className="wrap-form">
+            <div className="form-overlay"></div>
+            <form className="form-card" onSubmit={registerUser}>
+            <span className="form-title">Register</span>
 
-          <div className="wrap-input100 validate-input" data-validate="Enter password">
-            <Form.Label>Password: </Form.Label>
-            <input
-              className="input100"
-              type="password"
-              name="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
+            <div className="wrap-input wrap-input-firstName">
+                <Form.Label>First Name: </Form.Label>
+                <input
+                className="input"
+                type="text"
+                name="firstName"
+                placeholder="First Name"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                />
+            </div>
 
-          <div className="wrap-input100 validate-input" data-validate="Enter password confirmation">
-            <Form.Label>Confirm Password: </Form.Label>
-            <input
-              className="input100"
-              type="password"
-              name="confirmPassword"
-              placeholder="Confirm Password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-            />
-          </div>
+            <div className="wrap-input wrap-input-lastName">
+                <Form.Label>Last Name: </Form.Label>
+                <input
+                className="input"
+                type="text"
+                name="lastName"
+                placeholder="Last Name"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                />
+            </div>
 
-          <div className="container-login100-form-btn">
-              {
-                  isActive === true ?
-                  <button className = "login100-form-btn" type="submit" id="submitBtn">Submit</button>
-                  :
-                  <button className = "login100-form-btn-disabled" type="submit" id="submitBtn" disabled>Submit</button>
-              }
+            <div className="wrap-input wrap-input-email">
+                <Form.Label>Email Address: </Form.Label>
+                <input
+                className="input"
+                type="email"
+                name="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                />
+            </div>
 
-          </div>
-        </form>
-      </div>
+            <div className="wrap-input wrap-input-mobileNo" >
+                <Form.Label>Mobile Number: </Form.Label>
+                <input
+                className="input"
+                type="tel"
+                name="mobileNo"
+                placeholder="Mobile Number"
+                value={mobileNo}
+                onChange={(e) => setMobileNo(e.target.value)}
+                />
+            </div>
 
-  );
+            <div className="wrap-input wrap-input-password">
+                <Form.Label>Password: </Form.Label>
+                <input
+                className="input"
+                type="password"
+                name="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                />
+            </div>
+
+            <div className="wrap-input wrap-input-confirmPassword">
+                <Form.Label>Confirm Password: </Form.Label>
+                <input
+                className="input"
+                type="password"
+                name="confirmPassword"
+                placeholder="Confirm Password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                />
+            </div>
+            {message && <div className="alert alert-danger">{message}</div>}
+            <div className="container-form-btn gap-3">
+                <button className = "form-btn" type="submit" id="submitBtn">Submit</button>
+                <Link to="/login" className="form-btn">
+                    Log In
+                 </Link>
+            </div>
+            </form>
+        </div>
+
+    );
 }

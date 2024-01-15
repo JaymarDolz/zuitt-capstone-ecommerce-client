@@ -1,28 +1,52 @@
-.wrap-login100 {
+.wrap-form {
+  position: relative;
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  max-height: 100%;
+  min-height: 100vh;
+  background-image: url('../images/formBackGround.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center ;
 }
 
-.login100-form {
+
+.form-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  max-width: 400px;
+  height: 100%;
+  background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.6));
+  z-index: 1;
+}
+
+.form-card {
+  margin-top: 20%;
+  margin-bottom: 10%;
+  margin-left: 2rem;
+  margin-right: 2rem;
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  min-width: 300px;
+  max-width: 500px;
   background: #fff;
   padding: 50px;
   border-radius: 10px;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
 }
 
-.login100-form-logo {
+.form-logo {
   font-size: 48px;
   color: #333;
   display: flex;
   justify-content: center;
 }
 
-.login100-form-title {
+.form-title {
   font-size: 24px;
   color: #333;
   display: block;
@@ -30,13 +54,13 @@
   margin: 20px 0;
 }
 
-.wrap-input100 {
+.wrap-input {
   position: relative;
   width: 100%;
   margin-bottom: 20px;
 }
 
-.input100 {
+.input {
   font-size: 16px;
   padding: 10px;
   width: 100%;
@@ -45,26 +69,16 @@
   outline: none;
 }
 
-.focus-input100::before {
-  content: attr(data-placeholder);
-  display: block;
-  color: #999;
-  font-size: 16px;
-  position: absolute;
-  top: 50%;
-  left: 10px;
-}
 
-
-
-.container-login100-form-btn {
+.container-form-btn {
   display: flex;
   justify-content: center;
   align-items: center;
   margin-top: 20px;
 }
 
-.login100-form-btn {
+.form-btn {
+  text-decoration: none;
   background: #333;
   color: #fff;
   font-size: 16px;
@@ -76,7 +90,7 @@
   transition: all .5s ease;
 }
 
-.login100-form-btn-disabled {
+/* .form-btn-disabled {
   background: #aeb3b9;
   color: #e8e8e8;
   font-size: 16px;
@@ -85,11 +99,10 @@
   border-radius: 25px;
   cursor: pointer;
   outline: none;
-
   transition: all .5s ease;
-}
+} */
 
-.login100-form-btn:hover {
+.form-btn:hover {
   background: #555;
 }
 
@@ -97,5 +110,25 @@
   text-align: center;
 }
 
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  } 
+  20%, 40%, 60%, 80% {
+    transform: translateX(-2%);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(2%);
+  }
+}
+
+.wrap-input-firstName.shake .input,
+.wrap-input-lastName.shake .input,
+.wrap-input-email.shake .input,
+.wrap-input-mobileNo.shake .input,
+.wrap-input-password.shake .input,
+.wrap-input-confirmPassword.shake .input{
+  animation: shake 0.2s;
+}
 
 

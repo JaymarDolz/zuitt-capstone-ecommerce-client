@@ -1,27 +1,23 @@
-import Button from 'react-bootstrap/Button';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import '../styles/Banner.css'; // Import your styles
 
-import { NavLink } from 'react-router-dom';
+export default function Banner() {
+  return (
+    <div className="section-hero">
+      <div className="overlay"></div>
+      <div className="banner-content">
 
+          <h1 className="banner-heading">PREPARE YOUR PUP FOR THE ULTIMATE APAWCALYPSE</h1>
+          <div className="link-wrapper">
+            <Link to="/shop" className="button w-inline-block">
+              <div className="hero-btn">
+                <div className="button-text">SHOP NOW</div>
+              </div>
+            </Link>
+          </div>
 
-export default function Banner({error}){
-
-	const {title, content, destination, label} = error;
-
-	return(
-			<Row>
-				<Col className="p-5 text-center">
-					<>
-						<h1>{title}</h1>
-						<p>{content}</p>
-						<NavLink to={destination}>
-							<Button variant="primary">{label}</Button>
-						</NavLink>
-					</>				
-				
-				</Col>
-			</Row>	
-
-	)
-}
+      </div>
+    </div>
+  );
+};
