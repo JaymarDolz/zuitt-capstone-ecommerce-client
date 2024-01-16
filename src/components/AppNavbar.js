@@ -2,6 +2,7 @@ import { Container, Nav, Navbar, Form, FormControl, NavDropdown } from 'react-bo
 import { NavLink } from 'react-router-dom';
 import { useContext } from 'react';
 import UserContext from '../UserContext';
+import ViewCart from './ViewCart';
 import '../styles/Navbar.css';
 
 export default function AppNavbar() {
@@ -44,9 +45,13 @@ export default function AppNavbar() {
             </NavDropdown.Item>
             )}
             {user.id ? (
-              <NavDropdown.Item as={NavLink} to="/logout" className="nav-link">
-                Logout
-              </NavDropdown.Item>
+              <>
+                <ViewCart />
+                <NavDropdown.Item as={NavLink} to="/logout" className="nav-link">
+                  Logout
+                </NavDropdown.Item>
+              </>
+
             ) : (
               <>
                 <NavDropdown.Item as={NavLink} to="/login" className="nav-link">
@@ -75,9 +80,13 @@ export default function AppNavbar() {
             </Nav.Link>
             )}
           {user.id ? (
-            <Nav.Link as={NavLink} to="/logout" className="nav-link">
-              Logout
-            </Nav.Link>
+            <>
+              <ViewCart />
+              <Nav.Link as={NavLink} to="/logout" className="nav-link">
+                Logout
+              </Nav.Link>
+            </>
+
           ) : (
             <>
               <Nav.Link as={NavLink} to="/login" className="nav-link">

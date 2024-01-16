@@ -100,9 +100,18 @@
   font-family: Generalsans,sans-serif;
   font-weight: 400;
   box-sizing: border-box;
-  color: #667479;
+  /* color: #667479; */
   line-height: 1.65em;
   font-size: 15px;
+}
+
+.carts-array{
+  font-family: Generalsans,sans-serif;
+  font-weight: 700;
+  box-sizing: border-box;
+  line-height: 1.65em;
+  font-size: 1.2rem;
+  color: #e91414;
 }
 
 .purchase-btn {

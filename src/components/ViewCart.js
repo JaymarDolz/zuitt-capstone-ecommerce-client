@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Modal, Form, Table } from 'react-bootstrap';
 import CartCard from './CartCard';
+import Swal from 'sweetalert2';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-export default function ViewCart({ productId, continueToCheckout }) {
+export default function ViewCart({ continueToCheckout }) {
   const [carts, setCarts] = useState([]);
   const [showCart, setShowCart] = useState(false);
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
     fetchCartData();
@@ -20,35 +22,96 @@ export default function ViewCart({ productId, continueToCheckout }) {
       .then((res) => res.json())
       .then((data) => {
         setCarts(data.cart.cartItems);
+        setTotal(data.totalPrice);
       })
       .catch((error) => {
         console.error(error);
       });
   };
 
-  const openCart = async () => {
-    try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/cart/add-to-cart`, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('access')}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          productId: productId,
-          quantity: 1,
-        }),
+  const handleEditQuantity = (productId, newQuantity) => {
+    // Make the API call to update the quantity
+    fetch(`${process.env.REACT_APP_API_URL}/cart/update-cart-quantity`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('access')}`,
+      },
+      body: JSON.stringify({
+        productId: productId,
+        quantity: newQuantity,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        // Update the local state after a successful update
+        if (data.message === 'Quantity updated successfully') {
+          fetchCartData();
+        } else {
+          console.error('Failed to update quantity');
+        }
+      })
+      .catch((error) => {
+        console.error('Error updating quantity:', error);
       });
+  };
 
-      if (response.ok) {
-        fetchCartData();
-        setShowCart(true);
-      } else {
-        console.error('Failed to add item to cart');
-      }
-    } catch (error) {
-      console.error('Error adding item to cart:', error);
-    }
+  const handleRemoveItem = (productId) => {
+    // Make the API call to remove the item from the cart
+    fetch(`${process.env.REACT_APP_API_URL}/cart/${productId}/remove-from-cart`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('access')}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        // Update the local state after a successful removal
+        if (data.message === 'Product removed from the cart') {
+          Swal.fire({
+            title: 'Deleted!',
+            icon: 'success',
+            text: 'Item has been deleted',
+          });
+          fetchCartData();
+        } else {
+          console.error('Failed to remove item from cart');
+        }
+      })
+      .catch((error) => {
+        console.error('Error removing item from cart:', error);
+      });
+  };
+
+  const handleCheckout = () => {
+    fetch(`${process.env.REACT_APP_API_URL}/orders/checkout`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('access')}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.message === 'Checkout successful') {
+          Swal.fire({
+            title: 'Checkout Successful!',
+            icon: 'success',
+            text: 'Your order has been placed successfully.',
+          });
+          setShowCart(false);
+          fetchCartData();
+        } else {
+          console.error('Failed to checkout');
+        }
+      })
+      .catch((error) => {
+        console.error('Error during checkout:', error);
+      });
+  };
+
+  const openCart = () => {
+    fetchCartData();
+    setShowCart(true);
   };
 
   const closeCart = () => {
@@ -57,7 +120,9 @@ export default function ViewCart({ productId, continueToCheckout }) {
 
   return (
     <>
-     <Button className='link-btn' onClick={openCart}> Purchase </Button>
+      <Button className="cart-button" variant="text" onClick={openCart}>
+        Cart <span className='carts-array'>{carts.length} </span>
+      </Button>
       <Modal show={showCart} onHide={closeCart}>
         <Form onSubmit={continueToCheckout}>
           <Modal.Header closeButton>
@@ -70,26 +135,25 @@ export default function ViewCart({ productId, continueToCheckout }) {
                   <th>Product Name</th>
                   <th>Quantity</th>
                   <th>Subtotal</th>
+                  <th>Edit Quantity</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {carts.map((cart) => (
                   <CartCard
                     key={cart.productId}
-                    productId={cart.productId}
-                    quantity={cart.quantity}
-                    subtotal={cart.subtotal}
+                    cart={cart}
+                    onEditQuantity={handleEditQuantity}
+                    onRemoveItem={handleRemoveItem}
                   />
                 ))}
               </tbody>
             </Table>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={closeCart}>
-              Close
-            </Button>
-            <Button variant="primary" type="submit">
-              Continue to Checkout
+            <Button variant="primary" onClick={handleCheckout}>
+              Checkout
             </Button>
           </Modal.Footer>
         </Form>
