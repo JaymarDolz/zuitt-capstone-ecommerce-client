@@ -13,6 +13,7 @@
   line-height: clamp(6vh, 6vw, 10vh);
   font-weight: 700;
   margin-bottom: 16px;
+  z-index: 1;
 }
 
 .stacked-intro {

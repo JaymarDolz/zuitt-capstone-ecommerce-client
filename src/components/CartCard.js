@@ -35,15 +35,15 @@ export default function CartCard({ cart, onEditQuantity, onRemoveItem }) {
 
   return (
     <tr>
-      <td>{productName}</td>
-      <td>{quantity}</td>
-      <td><span>&#8369;</span>{(price * quantity).toLocaleString()}</td>
-      <td>
+      <td className='text-center'>{productName}</td>
+      <td className='text-center'>{quantity}</td>
+      <td className='text-center'><span>&#8369;</span>{(price * quantity).toLocaleString()}</td>
+      <td className='text-center'>
         <Button variant="outline-primary" onClick={handleDecrease}>-</Button>
         <span className="mx-2">{quantity}</span>
         <Button variant="outline-primary" onClick={handleIncrease}>+</Button>
       </td>
-      <td>
+      <td className='text-center'>
         <Button variant="danger" onClick={handleRemove}>Remove</Button>
       </td>
     </tr>

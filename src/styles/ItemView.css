@@ -131,3 +131,7 @@
 .purchase-btn:hover {
   background: #656565 !important;
 }
+
+.modal {
+  --bs-modal-width: 700px
+}

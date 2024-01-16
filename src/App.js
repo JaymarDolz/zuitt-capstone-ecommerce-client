@@ -14,6 +14,7 @@ import ItemView from './pages/ItemView';
 import Register from './pages/Register';
 import Login from './pages/Login'
 import Logout from './pages/Logout';
+import Error from './pages/Error'
 
 export default function App() {
   const [user, setUser] = useState({ id: null, isAdmin: null, loading: true });
@@ -66,7 +67,7 @@ export default function App() {
               <Route path="/register" element={<Register />} />
               <Route path="/login" element={<Login />} />
               <Route path="/logout" element={<Logout />} />
-
+              <Route path="/*" element={<Error />} />
             </Routes>
           ) : (
             <p>Loading...</p>

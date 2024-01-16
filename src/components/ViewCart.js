@@ -22,7 +22,8 @@ export default function ViewCart({ continueToCheckout }) {
       .then((res) => res.json())
       .then((data) => {
         setCarts(data.cart.cartItems);
-        setTotal(data.totalPrice);
+        setTotal(data.cart.totalPrice);
+
       })
       .catch((error) => {
         console.error(error);
@@ -48,6 +49,11 @@ export default function ViewCart({ continueToCheckout }) {
         if (data.message === 'Quantity updated successfully') {
           fetchCartData();
         } else {
+          Swal.fire({
+            title: 'Error!',
+            icon: 'error',
+            text: 'Failed to update quantity'
+          })
           console.error('Failed to update quantity');
         }
       })
@@ -75,6 +81,11 @@ export default function ViewCart({ continueToCheckout }) {
           });
           fetchCartData();
         } else {
+          Swal.fire({
+            title: 'Error!',
+            icon: 'error',
+            text: 'Failed to remove item from cart'
+          })
           console.error('Failed to remove item from cart');
         }
       })
@@ -101,6 +112,11 @@ export default function ViewCart({ continueToCheckout }) {
           setShowCart(false);
           fetchCartData();
         } else {
+          Swal.fire({
+            title: 'Error!',
+            icon: 'error',
+            text: `Failed to checkout`
+          })
           console.error('Failed to checkout');
         }
       })
@@ -152,6 +168,9 @@ export default function ViewCart({ continueToCheckout }) {
             </Table>
           </Modal.Body>
           <Modal.Footer>
+            <div>
+              <h4 className='ms-auto'>Total: {total.toLocaleString()}</h4>
+            </div>
             <Button variant="primary" onClick={handleCheckout}>
               Checkout
             </Button>
