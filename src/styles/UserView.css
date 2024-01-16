@@ -8,6 +8,21 @@
   height: 100%;
 }
 
+.heading {
+  font-size: clamp(5vh, 5vw, 10vh);
+  line-height: clamp(6vh, 6vw, 10vh);
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.stacked-intro {
+  position: absolute;
+  bottom: 3rem;
+  left: 2rem;
+  color: #fff;
+  text-align: left;
+}
+
 .background {
   background-image: url('../images/shophero.png');
   background-size: cover;
@@ -21,7 +36,7 @@
 }
 
 .overlay {
-  background-color: rgba(0, 0, 0, 0.);
+  background-color: rgba(0, 0, 0, 0.2);
   position: absolute;
   top: 0;
   left: 0;
@@ -30,53 +45,66 @@
   z-index: -1;
 }
 
-.shop-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Adjust the minmax values as needed */
-  grid-gap: 24px; /* Adjust the gap between items */
+
+.description {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2; 
 }
 
-.shop-grid.w-dyn-items {
-  padding-top: 0;
+.product-card-description {
+  font-family: Generalsans,sans-serif;
+  font-weight: 400;
   box-sizing: border-box;
+  color: #667479;
+  line-height: 1.65em;
+  font-size: 15px;
+  align-items: center;
+  justify-content: center;
+  text-align: justify;
 }
 
-.shop-hero {
-  /* Your existing styles */
+.description.expanded {
+  -webkit-line-clamp: unset; 
 }
 
-.grid-wrapper {
-  /* Your existing styles */
+.show-more {
+  font-weight: bold;
+  text-align: center;
+  color: rgb(71, 71, 71);
+  cursor: pointer;
+  margin-top: .5rem;
+  margin-bottom: 3rem;
 }
 
-/* Add these styles to ensure the grid layout */
-.card-info {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 100%;
+.red-banner {
+  background-color: red;
+  color: white;
+  text-align: center;
+  padding: 20px;
 }
 
-.card-image {
-  position: relative;
-  overflow: hidden;
-  height: 0;
-  padding-bottom: 100%;
+.off-sale {
+  font-size: 5vh; 
 }
 
-.card-image-wrapper {
-  position: relative;
-  overflow: hidden;
-  margin-bottom: 8px; /* Adjust margin as needed */
+
+.details-btn {
+  text-decoration: none;
+  display: inline-block;
+  background: #333;
+  color: #fff;
+  font-size: 16px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.5s ease;
 }
 
-.image-card {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+.details-btn:hover {
+  background: #555;
 }

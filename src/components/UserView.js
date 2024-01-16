@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Container, Row, Col } from 'react-bootstrap';
 import ProductCard from './ProductCard';
 
 import '../styles/UserView.css';
@@ -14,8 +15,6 @@ export default function UserView({ productsData, fetchDataFunc }) {
     fetchDataFunc();
   }, [fetchDataFunc]);
 
-  console.log(productsData);
-
   return (
     <div>
       <div className="shop-hero">
@@ -23,25 +22,28 @@ export default function UserView({ productsData, fetchDataFunc }) {
           <div className="background"></div>
           <div className="overlay"></div>
         </div>
-        <div className="container mt-4">
-          <div className="row">
-            <div className="col-12">
-              <div className="stacked-intro">
-                <h1 className="heading extra-large">Find the furfect fit</h1>
-              </div>
-            </div>
+        <Container>
+          <div className="stacked-intro">
+            <h1 className="heading">Find the furfect fit</h1>
           </div>
-        </div>
+        </Container>
       </div>
-      <div className="container mt-4">
-        <div className="row">
-          {products.map((product) => (
-            <div key={product._id} className="col-md-4 mb-4 gap-4">
-              <ProductCard productData={product} />
-            </div>
-          ))}
-        </div>
+      <div className="red-banner">
+        <h1 className="off-sale">ALL ITEMS 80% OFF!</h1>
       </div>
+      {/* Product grid section */}
+      <div className='py-5'>
+        <Container fluid className='mt-5'>
+          <Row>
+            {products.map((product) => (
+              <Col key={product._id} md={6} lg={4} className="mb-5">
+                <ProductCard productData={product} />
+              </Col>
+            ))}
+          </Row>
+        </Container>
+      </div>
+
     </div>
   );
 }

@@ -15,7 +15,7 @@ export default function AppNavbar() {
       {/* Left Section */}
       <div className="brand-section ms-3">
         <Navbar.Brand as={NavLink} to="/" className="brand-link">
-          Sana Mall
+          Commandog
         </Navbar.Brand>
       </div>
 
@@ -34,9 +34,15 @@ export default function AppNavbar() {
             <NavDropdown.Item as={NavLink} to="/" className="nav-link">
               Home
             </NavDropdown.Item>
-            <NavDropdown.Item as={NavLink} to="/shop" className="nav-link">
+            {user.isAdmin ? (
+              <NavDropdown.Item as={NavLink} to="/shop" className="nav-link">
+              Admin Dashboard
+            </NavDropdown.Item>
+            ):(
+              <NavDropdown.Item as={NavLink} to="/shop" className="nav-link">
               Shop
             </NavDropdown.Item>
+            )}
             {user.id ? (
               <NavDropdown.Item as={NavLink} to="/logout" className="nav-link">
                 Logout
@@ -59,9 +65,15 @@ export default function AppNavbar() {
           <Nav.Link as={NavLink} to="/" className="nav-link">
             Home
           </Nav.Link>
-          <Nav.Link as={NavLink} to="/shop" className="nav-link">
-            Shop
-          </Nav.Link>
+          {user.isAdmin ? (
+              <Nav.Link as={NavLink} to="/shop" className="nav-link">
+              Admin Dashboard
+            </Nav.Link>
+            ):(
+              <Nav.Link as={NavLink} to="/shop" className="nav-link">
+              Shop
+            </Nav.Link>
+            )}
           {user.id ? (
             <Nav.Link as={NavLink} to="/logout" className="nav-link">
               Logout

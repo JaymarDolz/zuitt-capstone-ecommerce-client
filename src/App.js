@@ -10,6 +10,7 @@ import './App.css';
 import AppNavbar from './components/AppNavbar'
 import Home from './pages/Home';
 import Shop from './pages/Shop';
+import ItemView from './pages/ItemView';
 import Register from './pages/Register';
 import Login from './pages/Login'
 import Logout from './pages/Logout';
@@ -61,6 +62,7 @@ export default function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/shop" element={<Shop />} />
+              <Route path="/products/:productId" element={<ItemView />} />
               <Route path="/register" element={<Register />} />
               <Route path="/login" element={<Login />} />
               <Route path="/logout" element={<Logout />} />
