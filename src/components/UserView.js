@@ -6,6 +6,7 @@ import '../styles/UserView.css';
 
 export default function UserView({ productsData, fetchDataFunc }) {
   const [products, setProducts] = useState([]);
+  const [scrollPosition, setScrollPosition] = useState(0);
 
   useEffect(() => {
     setProducts(productsData);
@@ -15,9 +16,20 @@ export default function UserView({ productsData, fetchDataFunc }) {
     fetchDataFunc();
   }, [fetchDataFunc]);
 
+  const handleScroll = () => {
+    setScrollPosition(window.scrollY);
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   return (
     <div>
-      <div className="shop-hero">
+      <div className="shop-hero" style={{ backgroundPositionY: `${scrollPosition * 0.5}px` }}>
         <div className="background-wrapper">
           <div className="background"></div>
           <div className="overlay"></div>
@@ -32,7 +44,7 @@ export default function UserView({ productsData, fetchDataFunc }) {
         <h1 className="off-sale">ALL ITEMS 80% OFF!</h1>
       </div>
       {/* Product grid section */}
-      <div className='py-5'>
+      <div className='py-5 product-grid-section'>
         <Container fluid className='mt-5'>
           <Row>
             {products.map((product) => (
@@ -43,7 +55,6 @@ export default function UserView({ productsData, fetchDataFunc }) {
           </Row>
         </Container>
       </div>
-
     </div>
   );
 }

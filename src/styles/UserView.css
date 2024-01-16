@@ -1,6 +1,7 @@
 .shop-hero {
   position: relative;
-  min-height: 80vh; 
+  min-height: 80vh;
+  overflow: hidden;
 }
 
 .background-wrapper {
@@ -28,7 +29,7 @@
   background-image: url('../images/shophero.png');
   background-size: cover;
   background-position: center;
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
@@ -46,17 +47,21 @@
   z-index: -1;
 }
 
+/* New class for product grid section background */
+.product-grid-section {
+  background-color: white;
+}
 
 .description {
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2; 
+  -webkit-line-clamp: 2;
 }
 
 .product-card-description {
-  font-family: Generalsans,sans-serif;
+  font-family: Generalsans, sans-serif;
   font-weight: 400;
   box-sizing: border-box;
   color: #667479;
@@ -68,7 +73,7 @@
 }
 
 .description.expanded {
-  -webkit-line-clamp: unset; 
+  -webkit-line-clamp: unset;
 }
 
 .show-more {
@@ -76,7 +81,7 @@
   text-align: center;
   color: rgb(71, 71, 71);
   cursor: pointer;
-  margin-top: .5rem;
+  margin-top: 0.5rem;
   margin-bottom: 3rem;
 }
 
@@ -88,9 +93,8 @@
 }
 
 .off-sale {
-  font-size: 5vh; 
+  font-size: 5vh;
 }
-
 
 .details-btn {
   text-decoration: none;
@@ -109,3 +113,5 @@
 .details-btn:hover {
   background: #555;
 }
+
+/* Add any other existing styles as needed */
