@@ -18,9 +18,46 @@ import Error from './pages/Error'
 
 export default function App() {
   const [user, setUser] = useState({ id: null, isAdmin: null, loading: true });
+  const [carts, setCarts] = useState([]);
+  let [cartItemCount, setCartItemCount] = useState(0);
+  const [total, setTotal] = useState(0);
+
+
   const unsetUser = () => {
     localStorage.clear();
   }
+
+  
+  const fetchCartData = () => {
+    fetch(`${process.env.REACT_APP_API_URL}/cart/get-cart`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('access')}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        
+        // console.log(data)
+        if (data.cart){
+          setCartItemCount(data.cart.cartItems.length)
+          setCarts(data.cart.cartItems);
+          setTotal(data.cart.totalPrice);
+        } else {
+          setCartItemCount()
+          // console.log(cartItemCount)
+        }
+      })
+      .catch((error) => {
+        // console.error(error);
+      });
+  };
+
+
+  useEffect(()=>{
+    fetchCartData()
+  });
+
+
 
   useEffect(() => {
     fetch(`${process.env.REACT_APP_API_URL}/users/details`, {
@@ -58,7 +95,7 @@ export default function App() {
     <UserProvider value={{ user, setUser, unsetUser }}>
       <Router>
         <Container fluid>
-          <AppNavbar />
+          <AppNavbar fetchCartData={fetchCartData} carts={carts} total={total} cartItemCount={cartItemCount}/>
           {!user.loading ? (
             <Routes>
               <Route path="/" element={<Home />} />

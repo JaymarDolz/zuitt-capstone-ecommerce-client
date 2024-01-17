@@ -4,31 +4,16 @@ import CartCard from './CartCard';
 import Swal from 'sweetalert2';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-export default function ViewCart({ continueToCheckout }) {
-  const [carts, setCarts] = useState([]);
+export default function ViewCart({ fetchCartData, carts, total, cartItemCount }) {
+
   const [showCart, setShowCart] = useState(false);
-  const [total, setTotal] = useState(0);
+
 
   useEffect(() => {
     fetchCartData();
   }, []);
 
-  const fetchCartData = () => {
-    fetch(`${process.env.REACT_APP_API_URL}/cart/get-cart`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('access')}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setCarts(data.cart.cartItems);
-        setTotal(data.cart.totalPrice);
 
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
 
   const handleEditQuantity = (productId, newQuantity) => {
     // Make the API call to update the quantity
@@ -137,10 +122,10 @@ export default function ViewCart({ continueToCheckout }) {
   return (
     <>
       <Button className="cart-button" variant="text" onClick={openCart}>
-        Cart <span className='carts-array'>{carts.length} </span>
+        Cart <span className='carts-array'>{cartItemCount} </span>
       </Button>
       <Modal show={showCart} onHide={closeCart}>
-        <Form onSubmit={continueToCheckout}>
+        <Form>
           <Modal.Header closeButton>
             <Modal.Title>My Cart</Modal.Title>
           </Modal.Header>

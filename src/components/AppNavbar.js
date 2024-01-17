@@ -5,7 +5,7 @@ import UserContext from '../UserContext';
 import ViewCart from './ViewCart';
 import '../styles/Navbar.css';
 
-export default function AppNavbar() {
+export default function AppNavbar({  fetchCartData, carts, total, cartItemCount }) {
   const { user } = useContext(UserContext);
 
   return (
@@ -21,9 +21,9 @@ export default function AppNavbar() {
 
           {/* Middle Section */}
           <div className="search-section mx-3">
-            <Form className="d-flex">
+            {/* <Form className="d-flex">
               <FormControl type="search" placeholder="Search bar under Construction" className="mr-2 flex-grow-1" aria-label="Search" />
-            </Form>
+            </Form> */}
           </div>
 
           {/* Right Section (Dropdown for Small Screens) */}
@@ -44,7 +44,7 @@ export default function AppNavbar() {
               )}
               {user.id ? (
                 <>
-                  {!user.isAdmin && <ViewCart />}
+                  {!user.isAdmin && <ViewCart fetchCartData={fetchCartData} carts={carts} total={total} cartItemCount={cartItemCount} />}
                   <NavDropdown.Item as={NavLink} to="/logout" className="nav-link">
                     Logout
                   </NavDropdown.Item>
@@ -77,7 +77,7 @@ export default function AppNavbar() {
               )}
               {user.id ? (
                 <>
-                  {!user.isAdmin && <ViewCart />}
+                  {!user.isAdmin && <ViewCart fetchCartData={fetchCartData} carts={carts} total={total} cartItemCount={cartItemCount}/>}
                   <Nav.Link as={NavLink} to="/logout" className="nav-link">
                     Logout
                   </Nav.Link>
