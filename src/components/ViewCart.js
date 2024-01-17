@@ -8,9 +8,11 @@ export default function ViewCart({ fetchCartData, carts, total, cartItemCount })
 
   const [showCart, setShowCart] = useState(false);
 
+
   useEffect(() => {
     fetchCartData();
   }, []);
+
 
 
   const handleEditQuantity = (productId, newQuantity) => {
@@ -100,7 +102,6 @@ export default function ViewCart({ fetchCartData, carts, total, cartItemCount })
             icon: 'error',
             text: `Failed to checkout`
           })
-          carts=[];
           fetchCartData();
           console.error('Failed to checkout');
         }

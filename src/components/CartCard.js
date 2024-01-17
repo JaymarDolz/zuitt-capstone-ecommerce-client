@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Modal, Form, Table } from 'react-bootstrap';
 
-export default function CartCard({ cart, onEditQuantity, onRemoveItem }) {
+export default function CartCard({ cart, onEditQuantity, onRemoveItem}) {
   const [productName, setProductName] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState(0);

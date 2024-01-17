@@ -43,6 +43,7 @@ export default function App() {
           setCarts(data.cart.cartItems);
           setTotal(data.cart.totalPrice);
         } else {
+          setCarts([])
           setCartItemCount()
           // console.log(cartItemCount)
         }
@@ -55,7 +56,7 @@ export default function App() {
 
   useEffect(()=>{
     fetchCartData()
-  });
+  }, [fetchCartData]);
 
 
 
