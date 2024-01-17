@@ -8,11 +8,9 @@ export default function ViewCart({ fetchCartData, carts, total, cartItemCount })
 
   const [showCart, setShowCart] = useState(false);
 
-
   useEffect(() => {
     fetchCartData();
   }, []);
-
 
 
   const handleEditQuantity = (productId, newQuantity) => {
@@ -94,14 +92,16 @@ export default function ViewCart({ fetchCartData, carts, total, cartItemCount })
             icon: 'success',
             text: 'Your order has been placed successfully.',
           });
-          setShowCart(false);
           fetchCartData();
+          setShowCart(false);
         } else {
           Swal.fire({
             title: 'Error!',
             icon: 'error',
             text: `Failed to checkout`
           })
+          carts=[];
+          fetchCartData();
           console.error('Failed to checkout');
         }
       })
@@ -110,6 +110,7 @@ export default function ViewCart({ fetchCartData, carts, total, cartItemCount })
       });
   };
 
+  
   const openCart = () => {
     fetchCartData();
     setShowCart(true);

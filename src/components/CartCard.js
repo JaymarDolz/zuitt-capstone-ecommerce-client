@@ -7,6 +7,7 @@ export default function CartCard({ cart, onEditQuantity, onRemoveItem }) {
   const [price, setPrice] = useState(0);
   const [quantity, setQuantity] = useState(cart.quantity);
 
+
   useEffect(() => {
     fetch(`${process.env.REACT_APP_API_URL}/products/${cart.productId}`)
       .then((res) => res.json())
