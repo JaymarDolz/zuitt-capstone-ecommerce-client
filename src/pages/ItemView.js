@@ -6,7 +6,7 @@ import ViewCart from '../components/ViewCart';
 import Swal from 'sweetalert2';
 import '../styles/ItemView.css';
 
-export default function ItemView() {
+export default function ItemView({fetchCartData}) {
   const { productId } = useParams();
   const { user } = useContext(UserContext);
 
@@ -45,7 +45,7 @@ export default function ItemView() {
             icon: 'success',
             text: 'Item added to cart successfully',
           });
-          // Fetch cart data again if needed
+          fetchCartData()
         } else {
           Swal.fire({
             title: 'Error',

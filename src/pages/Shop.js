@@ -6,7 +6,7 @@ import UserView from '../components/UserView';
 
 
 
-export default function Shop(){
+export default function Shop({}){
     const [products, setProducts] = useState([]);
     const { user, setUser } = useContext(UserContext);
 

@@ -99,8 +99,8 @@ export default function App() {
           {!user.loading ? (
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/shop" element={<Shop />} />
-              <Route path="/products/:productId" element={<ItemView />} />
+              <Route path="/shop" element={<Shop fetchCartData={fetchCartData} />} />
+              <Route path="/products/:productId" element={<ItemView fetchCartData={fetchCartData}/>} />
               <Route path="/register" element={<Register />} />
               <Route path="/login" element={<Login />} />
               <Route path="/logout" element={<Logout />} />
