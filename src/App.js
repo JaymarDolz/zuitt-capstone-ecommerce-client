@@ -27,7 +27,6 @@ export default function App() {
     localStorage.clear();
   }
 
-  
   const fetchCartData = () => {
     fetch(`${process.env.REACT_APP_API_URL}/cart/get-cart`, {
       headers: {
@@ -36,8 +35,6 @@ export default function App() {
     })
       .then((res) => res.json())
       .then((data) => {
-        
-        // console.log(data)
         if (data.cart){
           setCartItemCount(data.cart.cartItems.length)
           setCarts(data.cart.cartItems);
@@ -45,18 +42,17 @@ export default function App() {
         } else {
           setCarts([])
           setCartItemCount()
-          // console.log(cartItemCount)
+          setTotal(0)
         }
       })
       .catch((error) => {
-        // console.error(error);
+
       });
   };
 
-
-  useEffect(()=>{
-    fetchCartData()
-  }, [fetchCartData]);
+  // useEffect(()=>{
+  //   fetchCartData()
+  // }, [fetchCartData]);
 
 
 

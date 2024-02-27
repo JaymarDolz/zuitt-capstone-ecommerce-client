@@ -9,9 +9,9 @@ export default function ViewCart({ fetchCartData, carts, total, cartItemCount })
   const [showCart, setShowCart] = useState(false);
 
 
-  useEffect(() => {
-    fetchCartData();
-  }, []);
+  // useEffect(() => {
+  //   fetchCartData();
+  // }, [fetchCartData]);
 
 
 
