@@ -15,7 +15,7 @@ export default function AppNavbar({  fetchCartData, carts, total, cartItemCount 
           {/* Left Section */}
           <div className="brand-section ms-3">
             <Navbar.Brand as={NavLink} to="/" className="brand-link">
-              Commandog
+              K9
             </Navbar.Brand>
           </div>
 
